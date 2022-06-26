@@ -16,7 +16,7 @@ bot.command('start', ctx => {
 })
 
 //fetches yieldly apy
-bot.hears('yieldly apy', ctx => {
+bot.hears('Yieldly apy', ctx => {
   var yldyapy;
   console.log(ctx.from)
   axios.get(`https://app.yieldly.finance/staking/pools/v3/233725850`)
