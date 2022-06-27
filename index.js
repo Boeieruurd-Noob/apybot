@@ -1,4 +1,3 @@
-
 const axios = require("axios");
 const path = require("path")
 const port = process.env.PORT || 3000;
@@ -16,7 +15,7 @@ bot.command('start', ctx => {
 })
 
 //fetches yieldly apy
-bot.hears('Yieldly apy', ctx => {
+bot.hears('yieldly apy', ctx => {
   var yldyapy;
   console.log(ctx.from)
   axios.get(`https://app.yieldly.finance/staking/pools/v3/233725850`)
@@ -27,15 +26,21 @@ bot.hears('Yieldly apy', ctx => {
     fixedtvlusd = (tvlusd.toLocaleString('en-US'))
     const message_id = ctx.message.message_id
     const message =
-`YLDY/YLDY APY is: ${apy}%
-TVL: ${fixedtvlusd} USD.`
+`The current APY of the YLDY/YLDY pool is: ${apy}%
+The TVL of this pool is: ${fixedtvlusd} USD.`
     ctx.reply(message, { reply_to_message_id: message_id }) ,{
     }
   })
   })
 
+  // Start webhook via launch method (preferred)
+  bot.launch({
+      webhook: {
+        domain: 'https://bot.boeieruurd.com',
+        port: process.env.PORT
+      }
+    })
 
-
-
-
-bot.launch()
+  // Enable graceful stop
+  process.once('SIGINT', () => bot.stop('SIGINT'))
+  process.once('SIGTERM', () => bot.stop('SIGTERM'))
