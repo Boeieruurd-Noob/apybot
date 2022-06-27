@@ -25,9 +25,7 @@ bot.hears('yieldly apy', ctx => {
     tvlusd = (Math.round(response.data.tvlUSD))
     fixedtvlusd = (tvlusd.toLocaleString('en-US'))
     const message_id = ctx.message.message_id
-    const message =
-`The current APY of the YLDY/YLDY pool is: ${apy}%
-The TVL of this pool is: ${fixedtvlusd} USD.`
+    const message =`YLDY/YLDY APY is: ${apy}% TVL: ${fixedtvlusd} USD.`
     ctx.reply(message, { reply_to_message_id: message_id }) ,{
     }
   })
