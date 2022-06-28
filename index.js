@@ -45,6 +45,37 @@ TVL: ${fixedtvlusd} USD.
 
     ctx.reply(message, { reply_to_message_id: message_id }) ,{
     }
+    
+    //bot action
+bot.hears('glitter apy', ctx => {
+
+  console.log(ctx.from)
+
+//fetches apy values
+
+  axios.get(`https://app.yieldly.finance/staking/pools/v3/786777082`)
+  .then(response => {
+    console.log(response.data)
+
+//defines apy / tvl and rounds the numbers gotten from yieldly.
+
+    glitterapy = (Math.round(response.data.apy * 100) / 100)
+    glittertvlusd = (Math.round(response.data.tvlUSD))
+    glitterfixedtvlusd = (tvlusd.toLocaleString('en-US'))
+
+//defines message_id to quote respond on telegram, and defines the message to respond.
+
+    const message_id = ctx.message.message_id
+    const message =
+`
+YLDY/Glitter APY is: ${glitterapy}%
+TVL: ${glitterfixedtvlusd} USD.
+
+`
+
+    ctx.reply(message, { reply_to_message_id: message_id }) ,{
+    }
+    
   })
   })
 
