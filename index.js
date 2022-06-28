@@ -76,9 +76,6 @@ TVL: ${glitterfixedtvlusd} USD.
 
     ctx.reply(message, { reply_to_message_id: message_id }) ,{
     }
-    
-  })
-  })
 
   // Start webhook via launch method (preferred)
   bot.launch({
