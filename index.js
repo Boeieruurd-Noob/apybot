@@ -44,7 +44,8 @@ TVL: ${fixedtvlusd} USD.
 `
 
     ctx.reply(message, { reply_to_message_id: message_id }) ,{
-    }
+  })
+})
     
     //bot action
 bot.hears('glitter apy', ctx => {
