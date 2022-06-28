@@ -84,7 +84,3 @@ TVL: ${glitterfixedtvlusd} USD.
         port: process.env.PORT
       }
     })
-
-  // Enable graceful stop
-  process.once('SIGINT', () => bot.stop('SIGINT'))
-  process.once('SIGTERM', () => bot.stop('SIGTERM'))
