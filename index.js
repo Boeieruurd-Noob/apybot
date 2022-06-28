@@ -36,7 +36,6 @@ const { Telegraf } = require('telegraf');
  //defines message_id to quote respond on telegram, and defines the message to respond.
 
      const message_id = ctx.message.message_id
-     const message =`YLDY/YLDY APY is: ${apy}% TVL: ${fixedtvlusd} USD.`
      const message =
  `
  YLDY/YLDY APY is: ${apy}%
