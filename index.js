@@ -12,7 +12,7 @@ const bot = new Telegraf(process.env.BOT_TOKEN);
 
 bot.command('start', ctx => {
   console.log(ctx.from)
-  bot.telegram.sendMessage(ctx.chat.id, 'Type "yieldly apy" to get the current apy of the YLDY/YLDY Pool.', {
+  bot.telegram.sendMessage(ctx.chat.id, 'Type "yieldly apy" to get information about yieldly-finance staking pools.', {
   })
 })
 
@@ -27,9 +27,10 @@ axios.all([
     axios.get('https://app.yieldly.finance/staking/pools/v3/786777082'),
     axios.get('https://app.yieldly.finance/staking/pools/v3/779181697'),
     axios.get('https://app.yieldly.finance/staking/pools/v3/754135308'),
-    axios.get('https://app.yieldly.finance/staking/pools/v3/751347943')
+    axios.get('https://app.yieldly.finance/staking/pools/v3/751347943'),
+    axios.get('https://app.yieldly.finance/staking/pools/v3/792754415')
   ])
-  .then(axios.spread((yieldlyRes, glitterRes, algxRes, boardRes, asastatsRes) => {
+  .then(axios.spread((yieldlyRes, glitterRes, algxRes, boardRes, asastatsRes, kitsuneRes) => {
     // do something with both responses
 
 
@@ -58,6 +59,10 @@ axios.all([
     asastatstvlusd = (Math.round(asastatsRes.data.tvlUSD))
     asastatsfixedtvlusd = (asastatstvlusd.toLocaleString('en-US'))
 
+    kitsuneapy = (Math.round(kitsuneRes.data.apy * 100) / 100)
+    kitsunetvlusd = (Math.round(kitsuneRes.data.tvlUSD))
+    kitsunefixedtvlusd = (kitsunetvlusd.toLocaleString('en-US'))
+
 
 
 //defines message_id to quote respond on telegram, and defines the message to respond.
@@ -65,26 +70,30 @@ axios.all([
     const message_id = ctx.message.message_id
     const message =
 `
-YLDY/YLDY APY: ${yieldlyapy}%
-TVL: ${yieldlyfixedtvlusd} USD.
+<b>YLDY/YLDY APY:</b> <i>${yieldlyapy}%</i>
+<b>TVL:</b> <i>${yieldlyfixedtvlusd} USD</i>
 
-YLDY/XGLI APY: ${glitterapy}%
-TVL: ${glitterfixedtvlusd} USD.
+<b>YLDY/XGLI APY:</b> <i>${glitterapy}%</i>
+<b>TVL:</b> <i>${glitterfixedtvlusd} USD</i>
 
-YLDY/ALGX APY: ${algxapy}%
-TVL: ${algxfixedtvlusd} USD.
+<b>YLDY/ALGX APY:</b> <i>${algxapy}%</i>
+<b>TVL:</b> <i>${algxfixedtvlusd} USD</i>
 
-YLDY/BOARD APY: ${boardapy}%
-TVL: ${boardfixedtvlusd} USD.
+<b>YLDY/BOARD APY:</b> <i>${boardapy}%</i>
+<b>TVL:</b> <i>${boardfixedtvlusd} USD</i>
 
-YLDY/ASASTATS APY: ${asastatsapy}%
-TVL: ${asastatsfixedtvlusd} USD.
+<b>YLDY/ASASTATS APY:</b> <i>${asastatsapy}%</i>
+<b>TVL:</b> <i>${asastatsfixedtvlusd} USD</i>
+
+<b>YLDY/KITSU APY:</b> <i>${kitsuneapy}%</i>
+<b>TVL:</b> <i>${kitsunefixedtvlusd} USD</i>
 `
 
-    ctx.reply(message, { reply_to_message_id: message_id })
+    ctx.reply(message, { reply_to_message_id: message_id, parse_mode: "HTML"})
   }))})
 
   // Start webhook via launch method (preferred)
+
   bot.launch({
       webhook: {
         domain: 'https://bot.boeieruurd.com',
