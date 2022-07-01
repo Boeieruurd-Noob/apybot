@@ -27,10 +27,9 @@ axios.all([
     axios.get('https://app.yieldly.finance/staking/pools/v3/786777082'),
     axios.get('https://app.yieldly.finance/staking/pools/v3/779181697'),
     axios.get('https://app.yieldly.finance/staking/pools/v3/754135308'),
-    axios.get('https://app.yieldly.finance/staking/pools/v3/751347943'),
-    axios.get('https://app.yieldly.finance/staking/pools/v3/792754415')
+    axios.get('https://app.yieldly.finance/staking/pools/v3/751347943')
   ])
-  .then(axios.spread((yieldlyRes, glitterRes, algxRes, boardRes, asastatsRes, kitsuneRes) => {
+  .then(axios.spread((yieldlyRes, glitterRes, algxRes, boardRes, asastatsRes) => {
     // do something with both responses
 
 
@@ -54,14 +53,10 @@ axios.all([
     boardapy = (Math.round(boardRes.data.apy * 100) / 100)
     boardtvlusd = (Math.round(boardRes.data.tvlUSD))
     boardfixedtvlusd = (boardtvlusd.toLocaleString('en-US'))
-  
+
     asastatsapy = (Math.round(asastatsRes.data.apy * 100) / 100)
     asastatstvlusd = (Math.round(asastatsRes.data.tvlUSD))
     asastatsfixedtvlusd = (asastatstvlusd.toLocaleString('en-US'))
-   
-    kitsunesapy = (Math.round(kitsuneRes.data.apy * 100) / 100)
-    kitsunetvlusd = (Math.round(kitsuneRes.data.tvlUSD))
-    kitsunefixedtvlusd = (kitsunetvlusd.toLocaleString('en-US'))
 
 
 
@@ -84,14 +79,11 @@ TVL: ${boardfixedtvlusd} USD.
 
 YLDY/ASASTATS APY: ${asastatsapy}%
 TVL: ${asastatsfixedtvlusd} USD.
-
-YLDY/KITSUNE APY: ${kitsuneapy}%
-TVL: ${kitsunefixedtvlusd} USD.
 `
 
     ctx.reply(message, { reply_to_message_id: message_id })
   }))})
-    
+
   // Start webhook via launch method (preferred)
   bot.launch({
       webhook: {
