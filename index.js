@@ -24,9 +24,11 @@ bot.hears('yieldly apy', ctx => {
 //fetches apy values
 axios.all([
     axios.get('https://app.yieldly.finance/staking/pools/v3/233725850'),
-    axios.get('https://app.yieldly.finance/staking/pools/v3/786777082')
+    axios.get('https://app.yieldly.finance/staking/pools/v3/786777082'),
+    axios.get('https://app.yieldly.finance/staking/pools/v3/779181697'),
+    axios.get('https://app.yieldly.finance/staking/pools/v3/754135308')
   ])
-  .then(axios.spread((yieldlyRes, glitterRes) => {
+  .then(axios.spread((yieldlyRes, glitterRes, algxRes, boardRes) => {
     // do something with both responses
 
 
@@ -43,6 +45,14 @@ axios.all([
     glittertvlusd = (Math.round(glitterRes.data.tvlUSD))
     glitterfixedtvlusd = (glittertvlusd.toLocaleString('en-US'))
 
+    algxapy = (Math.round(algxRes.data.apy * 100) / 100)
+    algxtvlusd = (Math.round(algxRes.data.tvlUSD))
+    algxfixedtvlusd = (algxtvlusd.toLocaleString('en-US'))
+
+    boardapy = (Math.round(boardRes.data.apy * 100) / 100)
+    boardtvlusd = (Math.round(boardRes.data.tvlUSD))
+    boardfixedtvlusd = (boardtvlusd.toLocaleString('en-US'))
+
 
 
 //defines message_id to quote respond on telegram, and defines the message to respond.
@@ -50,12 +60,17 @@ axios.all([
     const message_id = ctx.message.message_id
     const message =
 `
-YLDY/YLDY APY is: ${yieldlyapy}%
+YLDY/YLDY APY: ${yieldlyapy}%
 TVL: ${yieldlyfixedtvlusd} USD.
 
-YLDY/XGLI APY is: ${glitterapy}%
+YLDY/XGLI APY: ${glitterapy}%
 TVL: ${glitterfixedtvlusd} USD.
 
+YLDY/ALGX APY: ${algxapy}%
+TVL: ${algxfixedtvlusd} USD.
+
+YLDY/BOARD APY: ${boardapy}%
+TVL: ${boardfixedtvlusd} USD.
 `
 
     ctx.reply(message, { reply_to_message_id: message_id })
