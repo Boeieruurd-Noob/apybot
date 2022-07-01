@@ -133,7 +133,7 @@ axios.all([
   `
   <b>Distro Pools:</b>
 
-  <b>ALX APY:</b> <i>${algxapy}%</i>
+  <b>ALGX APY:</b> <i>${algxapy}%</i>
   <b>TVL:</b> <i>${algxfixedtvlusd} USD</i>
 
   <b>XET APY:</b> <i>${xetapy}%</i>
