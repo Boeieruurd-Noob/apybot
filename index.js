@@ -28,7 +28,7 @@ axios.all([
     axios.get('https://app.yieldly.finance/staking/pools/v3/779181697'),
     axios.get('https://app.yieldly.finance/staking/pools/v3/754135308'),
     axios.get('https://app.yieldly.finance/staking/pools/v3/751347943'),
-    axios.get('https://app.yieldly.finance/staking/pools/v3/792754415'),
+    axios.get('https://app.yieldly.finance/staking/pools/v3/792754415')
   ])
   .then(axios.spread((yieldlyRes, glitterRes, algxRes, boardRes, asastatsRes, kitsuneRes) => {
     // do something with both responses
