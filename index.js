@@ -12,7 +12,7 @@ const bot = new Telegraf(process.env.BOT_TOKEN);
 
 bot.command('start', ctx => {
   console.log(ctx.from)
-  bot.telegram.sendMessage(ctx.chat.id, 'Type "yieldly apy" to get information about yieldly-finance staking pools.', {
+  bot.telegram.sendMessage(ctx.chat.id, 'Type "yieldly apy" to get the current apy of the YLDY/YLDY Pool.', {
   })
 })
 
@@ -70,6 +70,8 @@ axios.all([
     const message_id = ctx.message.message_id
     const message =
 `
+<b>Yieldly Pools:</b>
+
 <b>YLDY/YLDY APY:</b> <i>${yieldlyapy}%</i>
 <b>TVL:</b> <i>${yieldlyfixedtvlusd} USD</i>
 
@@ -87,10 +89,62 @@ axios.all([
 
 <b>YLDY/KITSU APY:</b> <i>${kitsuneapy}%</i>
 <b>TVL:</b> <i>${kitsunefixedtvlusd} USD</i>
+
+<i>Looking for distro pools? Send: "distro apy".</i>
 `
 
     ctx.reply(message, { reply_to_message_id: message_id, parse_mode: "HTML"})
   }))})
+
+  bot.hears('distro apy', ctx => {
+
+    console.log(ctx.from)
+
+  //fetches apy values
+  axios.all([
+      axios.get('https://app.yieldly.finance/staking/pools/v3/779198429'),
+      axios.get('https://app.yieldly.finance/staking/pools/v3/772221734')
+    ])
+    .then(axios.spread((algxRes, xetRes) => {
+      // do something with both responses
+
+
+
+
+
+  //defines apy / tvl and rounds the numbers gotten from yieldly.
+
+      algxapy = (Math.round(algxRes.data.apy * 100) / 100)
+      algxtvlusd = (Math.round(algxRes.data.tvlUSD))
+      algxfixedtvlusd = (algxtvlusd.toLocaleString('en-US'))
+
+      xetapy = (Math.round(xetRes.data.apy * 100) / 100)
+      xettvlusd = (Math.round(xetRes.data.tvlUSD))
+      xetfixedtvlusd = (xettvlusd.toLocaleString('en-US'))
+
+
+
+
+
+  //defines message_id to quote respond on telegram, and defines the message to respond.
+
+      const message_id = ctx.message.message_id
+      const message =
+  `
+  <b>Distro Pools:</b>
+
+  <b>ALX APY:</b> <i>${algxapy}%</i>
+  <b>TVL:</b> <i>${algxfixedtvlusd} USD</i>
+
+  <b>XET APY:</b> <i>${xetapy}%</i>
+  <b>TVL:</b> <i>${xetfixedtvlusd} USD</i>
+
+  <i>More distro pools coming soon!</i>
+
+  `
+
+      ctx.reply(message, { reply_to_message_id: message_id, parse_mode: "HTML"})
+    }))})
 
   // Start webhook via launch method (preferred)
 
