@@ -65,7 +65,7 @@ axios.all([
     const message_id = ctx.message.message_id
     const message =
 `
-**YLDY/YLDY APY:** ${yieldlyapy}%
+YLDY/YLDY APY: ${yieldlyapy}%
 TVL: ${yieldlyfixedtvlusd} USD.
 
 YLDY/XGLI APY: ${glitterapy}%
