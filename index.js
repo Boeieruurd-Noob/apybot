@@ -6,6 +6,8 @@ require('dotenv').config();
 
 const { Telegraf } = require('telegraf');
 
+// Creates new bot instance, fetches the telegram api token.
+
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
 // Sends instruction when starting the bot
@@ -16,12 +18,14 @@ bot.command('start', ctx => {
   })
 })
 
-//bot action
+//bot starts action when it hears a predefined string
+
 bot.hears('yieldly apy', ctx => {
 
   console.log(ctx.from)
 
-//fetches apy values
+//fetches the needed data from defined endpoints.
+  
 axios.all([
     axios.get('https://app.yieldly.finance/staking/pools/v3/233725850'),
     axios.get('https://app.yieldly.finance/staking/pools/v3/786777082'),
@@ -30,14 +34,15 @@ axios.all([
     axios.get('https://app.yieldly.finance/staking/pools/v3/751347943'),
     axios.get('https://app.yieldly.finance/staking/pools/v3/792754415')
   ])
+  
+  // spreads the returned data in the order we made the requests in and stores it in individualy labeled responses.
+   
   .then(axios.spread((yieldlyRes, glitterRes, algxRes, boardRes, asastatsRes, kitsuneRes) => {
-    // do something with both responses
+  
+  // Now we can do something with our fetched data.
 
 
-
-
-
-//defines apy / tvl and rounds the numbers gotten from yieldly.
+  //Extracts needed data from our responses, formats it correctly, rounds the numbers and gives it names. 
 
     yieldlyapy = (Math.round(yieldlyRes.data.apy * 100) / 100)
     yieldlytvlusd = (Math.round(yieldlyRes.data.tvlUSD))
@@ -65,9 +70,12 @@ axios.all([
 
 
 
-//defines message_id to quote respond on telegram, and defines the message to respond.
+//Defines message_id as the message that originally initiated the request so we can respond to it later.
 
     const message_id = ctx.message.message_id
+    
+//Defines the message to send, markup in html.    
+    
     const message =
 `
 <b>Yieldly Pools:</b>
@@ -92,27 +100,29 @@ axios.all([
 
 <i>Looking for distro pools? Send: "distro apy".</i>
 `
-
+//replies the above message to "message_id" and defines the mode to parse "message" in.
+    
     ctx.reply(message, { reply_to_message_id: message_id, parse_mode: "HTML"})
   }))})
+
+//bot starts action when it hears a predefined string
 
   bot.hears('distro apy', ctx => {
 
     console.log(ctx.from)
 
-  //fetches apy values
+  //fetches the needed data from defined endpoints.
+    
   axios.all([
       axios.get('https://app.yieldly.finance/staking/pools/v3/779198429'),
       axios.get('https://app.yieldly.finance/staking/pools/v3/772221734')
     ])
+    
+  // spreads the returned data in the order we made the requests in and stores it in individualy labeled responses.
+    
     .then(axios.spread((algxRes, xetRes) => {
-      // do something with both responses
-
-
-
-
-
-  //defines apy / tvl and rounds the numbers gotten from yieldly.
+    
+  //defines apy / tvl and rounds the numbers stored in our responses.
 
       algxapy = (Math.round(algxRes.data.apy * 100) / 100)
       algxtvlusd = (Math.round(algxRes.data.tvlUSD))
@@ -123,12 +133,12 @@ axios.all([
       xetfixedtvlusd = (xettvlusd.toLocaleString('en-US'))
 
 
-
-
-
-  //defines message_id to quote respond on telegram, and defines the message to respond.
+   //Defines message_id as the message that originally initiated the request so we can respond to it later.
 
       const message_id = ctx.message.message_id
+      
+   //Defines the message to send, markup in html.    
+      
       const message =
   `
   <b>Distro Pools:</b>
@@ -142,7 +152,8 @@ axios.all([
   <i>More distro pools coming soon!</i>
 
   `
-
+  //replies the above message to "message_id" and defines the mode to parse "message" in.
+      
       ctx.reply(message, { reply_to_message_id: message_id, parse_mode: "HTML"})
     }))})
 
@@ -154,6 +165,7 @@ axios.all([
         port: process.env.PORT
       }
     })
+
   // Enable graceful stop
   process.once('SIGINT', () => bot.stop('SIGINT'))
   process.once('SIGTERM', () => bot.stop('SIGTERM'))
