@@ -157,6 +157,58 @@ axios.all([
       ctx.reply(message, { reply_to_message_id: message_id, parse_mode: "HTML"})
     }))})
 
+    //bot starts action when it hears a predefined string
+
+  bot.hears('lp apy', ctx => {
+
+    console.log(ctx.from)
+
+  //fetches the needed data from defined endpoints.
+    
+  axios.all([
+      axios.get('https://app.yieldly.finance/staking/pools/v3/804484890'),
+      axios.get('https://app.yieldly.finance/staking/pools/v3/792740888')
+    ])
+    
+  // spreads the returned data in the order we made the requests in and stores it in individualy labeled responses.
+    
+    .then(axios.spread((yldyalgoRes, kitsuyldyRes) => {
+    
+  //defines apy / tvl and rounds the numbers stored in our responses.
+
+  yldyalgoapy = (Math.round(yldyalgoRes.data.apy * 100) / 100)
+  yldyalgotvlusd = (Math.round(yldyalgoRes.data.tvlUSD))
+  yldyalgofixedtvlusd = (yldyalgotvlusd.toLocaleString('en-US'))
+
+  kitsuyldyapy = (Math.round(kitsuyldyRes.data.apy * 100) / 100)
+  kitsuyldytvlusd = (Math.round(kitsuyldyRes.data.tvlUSD))
+  kitsuyldyfixedtvlusd = (kitsuyldytvlusd.toLocaleString('en-US'))
+
+
+   //Defines message_id as the message that originally initiated the request so we can respond to it later.
+
+      const message_id = ctx.message.message_id
+      
+   //Defines the message to send, markup in html.    
+      
+      const message =
+  `
+  <b>Liquidity Token Pools:</b>
+
+  <b>YLDY/ALGO LP APY:</b> <i>${yldyalgoapy}%</i>
+  <b>TVL:</b> <i>${yldyalgofixedtvlusd} USD</i>
+
+  <b>KITSU/YLDY LP APY:</b> <i>${kitsuyldyapy}%</i>
+  <b>TVL:</b> <i>${kitsuyldyfixedtvlusd} USD</i>
+
+  <i>More LP pools coming soon!</i>
+
+  `
+  //replies the above message to "message_id" and defines the mode to parse "message" in.
+      
+      ctx.reply(message, { reply_to_message_id: message_id, parse_mode: "HTML"})
+    }))})
+
   // Start webhook via launch method (preferred)
 
   bot.launch({
