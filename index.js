@@ -20,7 +20,7 @@ bot.command('start', ctx => {
 
 //bot starts action when it hears a predefined string
 
-bot.hears(apy/i, ctx => {
+bot.hears('apy', ctx => {
 
   console.log(ctx.from)
 
