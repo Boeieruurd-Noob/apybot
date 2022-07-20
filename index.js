@@ -18,6 +18,8 @@ bot.command('start', ctx => {
   })
 })
 
+//THIS SECTION FETCHES NORMAL STAKING POOL DATA
+
 //bot starts action when it hears a predefined string
 
 bot.hears('apy', ctx => {
@@ -105,6 +107,8 @@ axios.all([
     ctx.reply(message, { reply_to_message_id: message_id, parse_mode: "HTML"})
   }))})
 
+//THIS SECTION FETCHES DISTRO STAKING POOL DATA
+
 //bot starts action when it hears a predefined string
 
   bot.hears('distro apy', ctx => {
@@ -156,6 +160,8 @@ axios.all([
 
       ctx.reply(message, { reply_to_message_id: message_id, parse_mode: "HTML"})
     }))})
+
+//THIS SECTION FETCHES LP TOKEN STAKING POOL DATA
 
     //bot starts action when it hears a predefined string
 
