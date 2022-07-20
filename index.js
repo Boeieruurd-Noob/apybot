@@ -14,7 +14,7 @@ const bot = new Telegraf(process.env.BOT_TOKEN);
 
 bot.command('start', ctx => {
   console.log(ctx.from)
-  bot.telegram.sendMessage(ctx.chat.id, 'Type "yieldly apy" to get the current apy of the YLDY/YLDY Pool.', {
+  bot.telegram.sendMessage(ctx.chat.id, 'Type "apy", "distro apy" or "lp apy" to get live pool data from Yieldly Finance.', {
   })
 })
 
